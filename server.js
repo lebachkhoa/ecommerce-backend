@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose");
 const app = require("./src/app");
 
 const PORT = 3000;
@@ -6,7 +7,8 @@ const server = app.listen(3000, () => {
     console.log(`Web service eCommerce start with port ${PORT}`);
 })
 
-process.on("SIGINT", () => {
+process.on("SIGINT", async () => {
+    await mongoose.disconnect();
     server.close(() => {
         console.log("Exit Server Express");
     })
