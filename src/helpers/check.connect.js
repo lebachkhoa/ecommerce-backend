@@ -4,6 +4,8 @@ const process = require("process");
 
 const _SECONDS = 5000;
 
+let intervalId = null;
+
 // count connect
 const countConnect = () => {
     const numConnection = mongoose.connections.length;
@@ -12,7 +14,7 @@ const countConnect = () => {
 
 // check over load
 const checkOverLoad = () => {
-    setInterval(() => {
+    intervalId = setInterval(() => {
         const numConnection = mongoose.connections.length;
         const numCores = os.cpus().length;
         const memoryUsage = process.memoryUsage.rss();
@@ -26,4 +28,19 @@ const checkOverLoad = () => {
     }, _SECONDS);            // monitor every 5 seconds
 }
 
-module.exports = {countConnect, checkOverLoad};
+// stop check over load
+const stopOverLoadCheck = () => {
+    if (intervalId) {
+        clearInterval(intervalId);      // stop monitoring
+        intervalId = null;
+        console.log("Over load monitoring stopped!");
+    }
+}
+
+// bind to exit (ctr C) event
+process.on("SIGINT", () => {
+    stopOverLoadCheck();
+    process.exit(0);
+})
+
+module.exports = { countConnect, checkOverLoad, stopOverLoadCheck };
