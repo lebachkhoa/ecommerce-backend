@@ -1,7 +1,9 @@
 const mongoose = require("mongoose");
 const { countConnect, checkOverLoad } = require("../helpers/check.connect");
 
-const connectString = `mongodb://localhost:27017/shopDEV`;
+const { dbConfig: { host, port, name } } = require("../configs/config");
+
+const connectString = `mongodb://${host}:${port}/${name}`;
 
 class Database {
     constructor() {
@@ -16,13 +18,13 @@ class Database {
         }
 
         mongoose.connect(connectString, {
-            maxPoolSize: 50     // defalt 100
+            maxPoolSize: 50                     // defalt 100
         }).then(_ => {
-            console.log("Connected Mongobd successful PRO");
+            console.log("Connected Mongobd successful::", connectString);
             countConnect();         // monitor the connection
             checkOverLoad();        // check if the number of connection exceed CPU-base threshold
         })
-            .catch(err => console.log("Error Connect!"));
+            .catch(err => console.log("Error connect database!"));
     }
 
     static getInstance() {

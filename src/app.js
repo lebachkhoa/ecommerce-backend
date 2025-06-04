@@ -3,7 +3,12 @@ const express = require("express");
 const helmet = require("helmet");
 const morgan = require("morgan");
 
+const env = require("dotenv");
+env.config();
+
 const app = express();
+
+// console.log("Process::", process.env);
 
 // init middlewares
 app.use(morgan("dev"));
