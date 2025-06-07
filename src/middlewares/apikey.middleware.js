@@ -1,4 +1,4 @@
-const keytokenModel = require("../models/keytoken.model");
+const apikeyModel = require("../models/apikey.model");
 
 const HEADERS = {
     API_KEY: "x-api-key",
@@ -10,27 +10,44 @@ const checkApiKey = async (req, res, next) => {
         const apiKey = req.headers[HEADERS.API_KEY]?.toString();
         if (!apiKey) {
             return res.status(403).json({
-                message: "Forbidden error"
+                message: "Forbidden error: API key missing"
             })
         }
 
         // check x-api-key if not in database, return
-        const findByKey = await keytokenModel.findOne({ key: apiKey, status: true }).lean();
+        const findByKey = await apikeyModel.findOne({ key: apiKey, status: true }).lean();
         if (!findByKey) {
             return res.status(403).json({
-                message: "Forbidden error"
+                message: "Forbidden error: invalid or inactive API key"
             })
         }
 
         // if key exists in database, pass
-        req.objKey = findByKey;
+        req.apiKeyInfo = findByKey;
+        console.log(req.apiKeyInfo);
         next();
     } catch (err) {
         return res.status(400).json({
-            message: err.message
+            message: "Invalid request",
+            error: err.message
         })
     }
 
 }
 
-module.exports = checkApiKey;
+// Middleware Factory pattern (Higher-Order Function for Middleware)
+const checkApiPermission = (permission) => (req, res, next) => {
+    const clientPermission = req.apiKeyInfo?.permission || [];
+    if (!clientPermission.includes(permission)) {
+        return res.status(403).json({
+            message: "Permission denied"
+        });
+    }
+    console.log(clientPermission);
+    next();
+}
+
+module.exports = {
+    checkApiKey,
+    checkApiPermission
+}
