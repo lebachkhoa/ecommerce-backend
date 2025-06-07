@@ -14,18 +14,14 @@ const app = express();
 app.use(morgan("dev"));
 app.use(helmet());
 app.use(compression());
+// app.use(express.urlencoded({ extended: true }));     // form
+app.use(express.json());
 
 // init database
 require("./dbs/init.mongodb");
 
 // init routes
-app.get("/", (req, res) => {
-    const strCompression = "Hello Express";
-    return res.status(200).json({
-        message: "Welcome to Express",
-        metadata: strCompression.repeat(10000)
-    });
-})
+app.use("/", require("./routes"));
 
 // handling error
 
