@@ -4,6 +4,7 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 
 const env = require("dotenv");
+const { NotFoundRequestError } = require("./core/error.response");
 env.config();
 
 const app = express();
@@ -23,6 +24,19 @@ require("./dbs/init.mongodb");
 // init routes
 app.use("/", require("./routes"));
 
-// handling error
+// catch all route for unmatch paths - forward to error handler middleware
+app.use((req, res, next) => {
+    next(new NotFoundRequestError());
+});
+
+// centralized Error handling middleware
+app.use((error, req, res, next) => {
+    const status = error.status || 500;
+    return res.status(status).json({
+        status: status,
+        message: error.message || "Internal Server Error"
+    });
+});
+
 
 module.exports = app;
