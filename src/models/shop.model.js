@@ -28,7 +28,7 @@ const shopSchema = new Schema({
         type: Boolean,
         default: false
     },
-    roles: {
+    role: {
         type: Array,
         default: []
     }
