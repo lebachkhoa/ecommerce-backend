@@ -1,36 +1,31 @@
 const JWT = require("jsonwebtoken");
 const keytokenModel = require("../models/keytoken.model");
+const { HEADER } = require("../constant");
+const { BadRequestError } = require("../core/error.response");
+const { publicKey } = require("../utils/keyStore");
+const verify = require("../utils/verify");
+
+/*
+    1. check header authorization missing
+    2. get access token
+    3. verify token
+    4. attach decoded user payload to req
+*/
 
 const verifyToken = async (req, res, next) => {
-    const accessToken = req.cookies.access_token;
-    if (!accessToken) {
-        return res.status(403).json({
-            message: "Acces Token is missing"
-        });
+    // 1. check header authorization missing
+    const authHeader = req.headers[HEADER.AUTHORIZATION];
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        throw new BadRequestError("Authorization Header missing");
     }
 
-    // decode token to read userID in payload
-    const decoded = JWT.decode(accessToken);
-    if (!decoded?.userId) {
-        return res.status(401).json({
-            message: "Invalid Token Payload"
-        });
-    }
+    // 2. get access token
+    const accessToken = authHeader.split(" ")[1];
 
-    // read public key on database to verify token
-    const findByUserId = await keytokenModel.findOne({ user: decoded.userId });
-    if (!findByUserId.publicKey) {
-        return res.status(401).json({
-            message: "Public key not found"
-        });
-    }
+    // 3. verify token
+    const verified = verify(accessToken, publicKey);
 
-    // verify token
-    const verified = JWT.verify(accessToken, findByUserId.publicKey, {
-        algorithms: ["RS256"]
-    });
-
-    // attach user infor to req
+    // 4. attach decoded user payload to req
     req.user = verified;
     next();
 }
