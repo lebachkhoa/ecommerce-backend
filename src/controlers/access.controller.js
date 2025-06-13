@@ -1,31 +1,34 @@
-const { BadRequestError } = require("../core/error.response");
-const { CREATED } = require("../core/success.response");
+const { CREATED, OK } = require("../core/success.response");
 const AccessService = require("../services/access.service");
+const cookieResponse = require("../utils/cookieResponse.ultil")
 
 class AccessController {
-    signUp = async (req, res, next) => {
+    static signUp = async (req, res, next) => {
         // response access token, refresh token to client
         const result = await AccessService.signUp(req.body);
-
-        res.cookie("access_token", result.accessToken, {
-            httpOnly: true,
-            secure: true,
-            sameSite: "strict",
-            maxAge: 60 * 60 * 1000      // 1h
-        });
-        res.cookie("refresh_token", result.refreshToken, {
-            httpOnly: true,
-            secure: true,
-            sameSite: "strict",
-            maxAge: 7 * 24 * 60 * 60 * 1000      // 7days
-        });
+        cookieResponse(res, result.refreshToken);
 
         new CREATED({
+            message: "Registed new Shop",
             metadata: {
                 user: result.user,
+                accessToken: result.accessToken
+            }
+        }).send(res);
+    }
+
+    static login = async (req, res, next) => {
+        const result = await AccessService.login(req.body);
+        cookieResponse(res, result.refreshToken);
+
+        new OK({
+            message: "Login successful",
+            metadata: {
+                user: result.user,
+                accessToken: result.accessToken
             }
         }).send(res);
     }
 }
 
-module.exports = new AccessController();
+module.exports = AccessController;

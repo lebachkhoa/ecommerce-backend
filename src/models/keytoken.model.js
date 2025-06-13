@@ -1,19 +1,19 @@
-const { Schema, Model, default: mongoose } = require("mongoose");
+const { Schema, model } = require("mongoose");
 
 const DOCUMENT_NAME = "key";
 const COLLECTION_NAME = "keys";
 
 const keyTokenSchema = new Schema({
-    user: {
+    userId: {
         type: Schema.Types.ObjectId,
         required: true,
         ref: "shop"                 // reference to _id of shops model
     },
-    publicKey: {
+    refreshToken: {
         type: String,
         required: true
     },
-    refreshToken: {
+    refreshTokensUsed: {
         type: Array,
         default: []
     }
@@ -22,4 +22,4 @@ const keyTokenSchema = new Schema({
     timestamps: true
 })
 
-module.exports = mongoose.model(DOCUMENT_NAME, keyTokenSchema);
+module.exports = model(DOCUMENT_NAME, keyTokenSchema);

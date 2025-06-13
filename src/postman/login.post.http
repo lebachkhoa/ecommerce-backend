@@ -1,0 +1,9 @@
+@urlDev = http://localhost:3052/v1/api
+
+POST {{urlDev}}/shop/login
+Content-Type: application/json
+
+{
+    "email": "shop01@gmail.com",
+    "password": "321987"
+}
