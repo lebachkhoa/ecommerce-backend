@@ -1,3 +1,9 @@
+/*
+    This Scheme is no longer used for managing refresh token
+    Use Redis to manage and validate fro improve performance, scalability, security 
+    like token revocation reuse detection 
+ */
+
 const { Schema, model } = require("mongoose");
 
 const DOCUMENT_NAME = "key";
@@ -12,10 +18,6 @@ const keyTokenSchema = new Schema({
     refreshToken: {
         type: String,
         required: true
-    },
-    refreshTokensUsed: {
-        type: Array,
-        default: []
     }
 }, {
     collection: COLLECTION_NAME,

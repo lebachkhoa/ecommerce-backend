@@ -1,5 +1,3 @@
-const JWT = require("jsonwebtoken");
-const keytokenModel = require("../models/keytoken.model");
 const { HEADER } = require("../constant");
 const { BadRequestError } = require("../core/error.response");
 const { publicKey } = require("../utils/keyStore");

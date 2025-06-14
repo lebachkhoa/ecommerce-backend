@@ -1,4 +1,4 @@
-const crypto = require("crypto");
+const { generateKeyPairSync } = require("crypto");
 const fs = require("fs");
 const path = require("path");
 
@@ -16,7 +16,7 @@ const generateKeyPair = () => {
         fs.mkdirSync(keyDir);
     }
 
-    const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
+    const { publicKey, privateKey } = generateKeyPairSync('rsa', {
         modulusLength: 4096,
         publicKeyEncoding: {
             type: 'spki',
