@@ -1,8 +1,8 @@
 const JWT = require("jsonwebtoken");
 
-const generateToken = (userId, privateKey) => {
+const generateToken = (userId, sessionId, privateKey) => {
     const accessToken = JWT.sign(
-        { userId: userId },     // payload
+        { userId, sessionId },      // payload
         privateKey,                 // RSA private key
         {
             algorithm: "RS256",
@@ -11,7 +11,7 @@ const generateToken = (userId, privateKey) => {
     );
 
     const refreshToken = JWT.sign(
-        { userId: userId },
+        { userId, sessionId },      // payload
         privateKey,
         {
             algorithm: "RS256",

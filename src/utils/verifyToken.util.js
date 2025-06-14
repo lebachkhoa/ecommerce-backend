@@ -1,7 +1,7 @@
 const { BadRequestError } = require("../core/error.response");
 const JWT = require("jsonwebtoken");
 
-const verify = (token, key) => {
+const verifyToken = (token, key) => {
     try {
         const verified = JWT.verify(token, key, {
             algorithms: ["RS256"]
@@ -13,4 +13,4 @@ const verify = (token, key) => {
 }
 
 
-module.exports = verify;
+module.exports = verifyToken;

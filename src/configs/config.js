@@ -9,6 +9,12 @@ const dev = {
         host: process.env.DEV_DB_HOST,
         port: process.env.DEV_DB_PORT,
         name: process.env.DEV_DB_NAME
+    },
+    redisConfig: {
+        host: process.env.DEV_REDIS_HOST,
+        port: process.env.DEV_REDIS_PORT,
+        password: process.env.DEV_REDIS_PASSWORD,
+        db: process.env.DEV_REDIS_DB
     }
 }
 
@@ -21,6 +27,12 @@ const pro = {
         host: process.env.PRO_DB_HOST,
         port: process.env.PRO_DB_PORT,
         name: process.env.PRO_DB_NAME
+    },
+    redisConfig: {
+        host: process.env.PRO_REDIS_HOST,
+        port: process.env.PRO_REDIS_PORT,
+        password: process.env.PRO_REDIS_PASSWORD,
+        db: process.env.PRO_REDIS_DB
     }
 }
 

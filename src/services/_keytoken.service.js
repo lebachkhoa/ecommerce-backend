@@ -1,4 +1,10 @@
-const keytokenModel = require("../models/keytoken.model");
+/*
+    This service is no longer used for managing refresh token
+    Use Redis to manage and validate fro improve performance, scalability, security 
+    like token revocation reuse detection 
+ */
+
+const keytokenModel = require("../models/_keytoken.model");
 
 const saveKeyToken = async ({ userId, refreshToken }) => {
     await keytokenModel.create({
