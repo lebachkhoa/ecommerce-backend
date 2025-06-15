@@ -6,6 +6,7 @@ const { createShop, findByEmail } = require("../shop.service");
 const { privateKey } = require("../../utils/keyStore");
 const { randomUUID } = require("node:crypto");
 const redisClient = require("../../redis/redisClient.util");
+const { updateRedis } = require("./redis.service");
 
 
 /*
@@ -38,8 +39,7 @@ const signUp = async ({ name, email, password }) => {
     const { accessToken, refreshToken } = generateToken(newShop._id, sessionId, privateKey);
 
     // 5. save refresh token to redis for session management, set expiry for refresh token
-    const redisKey = `session:${newShop._id}:${sessionId}`;
-    await redisClient.set(redisKey, refreshToken, { EX: 60 * 60 * 24 * 7 });             // 7 days
+    await updateRedis(newShop._id, sessionId, refreshToken, 60 * 60 * 24 * 7);
 
     return {
         user: {

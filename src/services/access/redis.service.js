@@ -1,8 +1,9 @@
 const redisClient = require("../../redis/redisClient.util");
+const { BadRequestError } = require("../../core/error.response");
 
 const updateRedis = async (userId, sessionId, refreshToken, ttlSeconds) => {
     const redisKey = `session:${userId}:${sessionId}`;
-    await redisClient.set(redisKey, refreshToken, { EX: ttlSeconds });             // 7 days
+    await redisClient.set(redisKey, refreshToken, "EX", ttlSeconds);
 }
 
 const addOldRefreshTokenToBlacklist = async (userId, refreshToken, ttlSeconds) => {
@@ -48,7 +49,7 @@ const getApiKeyFromCache = async (apiKey) => {
 }
 
 const setApiKeyFromCache = async (apiKey, data, ttlSeconds) => {
-    await redisClient.set(`apikey:${apiKey}`, JSON.stringify(data), { EX: ttlSeconds });
+    await redisClient.set(`apikey:${apiKey}`, JSON.stringify(data), "EX", ttlSeconds);
 }
 
 module.exports = {

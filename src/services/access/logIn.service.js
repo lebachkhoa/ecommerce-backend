@@ -36,8 +36,9 @@ const logIn = async ({ email, password }) => {
 
     // 5. store refresh token in redis
     await updateRedis(
-        holeShop._id,
+        holeShop._id.toString(),
         sessionId,
+        refreshToken,
         60 * 60 * 24 * 7      // 7 days
     );
 

@@ -6,8 +6,8 @@ const { isTokenMatch, isTokenReused, addOldRefreshTokenToBlacklist, updateRedis 
 
 /*
     1. verify refresh token and extract payload
-    2. check if old refresh token matchs the one saved in Redis for that session
-    3. check if refresh token reused
+    2. check if refresh token reused
+    3. check if old refresh token matchs the one saved in Redis for that session
     4. generate new token
     5. update new refresh token in redis
     6. blacklist oldRefresh token to prevent reuse
@@ -22,11 +22,11 @@ const refreshToken = async (oldRefreshToken) => {
         throw new BadRequestError("Invalid token payload or missing userId/sessionId");
     }
 
-    // 2. check if old refresh token matchs the one saved in Redis for that session
-    await isTokenMatch(userId, sessionId, oldRefreshToken);
-
-    // 3. check if refresh token reused
+    // 2. check if refresh token reused
     await isTokenReused(userId, sessionId, oldRefreshToken);
+
+    // 3. check if old refresh token matchs the one saved in Redis for that session
+    await isTokenMatch(userId, sessionId, oldRefreshToken);
 
     // 4. generate new token
     const { accessToken: newAccessToken, refreshToken: newRefreshToken } = generateToken(userId, sessionId, privateKey);
