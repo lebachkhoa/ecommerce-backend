@@ -2,6 +2,7 @@ const compression = require("compression");
 const express = require("express");
 const helmet = require("helmet");
 const morgan = require("morgan");
+const cookieParser = require("cookie-parser");
 
 const env = require("dotenv");
 const { NotFoundRequestError } = require("./core/error.response");
@@ -15,8 +16,9 @@ const app = express();
 app.use(morgan("dev"));
 app.use(helmet());
 app.use(compression());
-// app.use(express.urlencoded({ extended: true }));     // form
+app.use(express.urlencoded({ extended: true }));     // using with Form
 app.use(express.json());
+app.use(cookieParser());
 
 // init database
 require("./dbs/init.mongodb");

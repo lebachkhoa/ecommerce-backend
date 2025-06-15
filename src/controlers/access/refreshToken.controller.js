@@ -8,7 +8,7 @@ const refreshTokenController = async (req, res, next) => {
     cookieResponse(res, result.refreshToken);
 
     return new CREATED({
-        message: "",
+        message: "Created new access token successful",
         metadata: {
             user: result.user,
             accessToken: result.accessToken
