@@ -1,0 +1,19 @@
+@urlDev = http://localhost:3052/v1/api
+
+POST {{urlDev}}/product
+Content-Type: application/json
+
+{
+    "product_name": "T-Shirt Casual",
+    "product_thumb": "url_to_tshirt.jpg",
+    "product_description": "Comfortable cotton t-shirt.",
+    "product_price": 25,
+    "product_quantity": 100,
+    "product_type": "clothing",
+    "product_shop": "684e3046ca8712f7de74d444",
+    "product_attributes": {
+        "brand": "FashionWear",
+        "size": "L",
+        "material": "Cotton"
+    }
+}
