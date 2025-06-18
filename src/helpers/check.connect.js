@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const os = require("os");
 const process = require("process");
 
-const _SECONDS = 5000;
+const _SECONDS = 5 * 60 * 1000;     // 5 minute
 
 let intervalId = null;
 
@@ -25,7 +25,7 @@ const checkOverLoad = () => {
         if (numConnection > maxConnections) {
             console.log("Connection over load detected!");
         }
-    }, _SECONDS);            // monitor every 5 seconds
+    }, _SECONDS);            
 }
 
 // stop check over load
